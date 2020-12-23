@@ -11,6 +11,7 @@ export class QueueReader extends events.EventEmitter implements interfaces.IQueu
   private sqs: AWS.SQS;
   private queueName: string;
   public batchSize: number;
+  public AttributeNames: string[];
   private listening: boolean = false;
   private stopping: boolean = false;
   private deleter: interfaces.IMessageDeleter;
@@ -97,7 +98,8 @@ export class QueueReader extends events.EventEmitter implements interfaces.IQueu
 
     var params = {
       MaxNumberOfMessages: me.batchSize,
-      QueueUrl: me.queueName
+      QueueUrl: me.queueName,
+      AttributeNames: me.AttributeNames
     };
 
     //ensure we aren't holding any outstanding delete requests
