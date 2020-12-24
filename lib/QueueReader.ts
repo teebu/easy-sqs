@@ -11,13 +11,13 @@ export class QueueReader extends events.EventEmitter implements interfaces.IQueu
   private sqs: AWS.SQS;
   private queueName: string;
   public batchSize: number;
-  public AttributeNames: string[];
+  public attributeNames: string[];
   private listening: boolean = false;
   private stopping: boolean = false;
   private deleter: interfaces.IMessageDeleter;
   private init: boolean;
 
-  constructor(sqs: AWS.SQS, queueName: string, batchSize?: number) {
+  constructor(sqs: AWS.SQS, queueName: string, batchSize?: number, attributeNames?: string[]) {
     super();
 
     if (queueName == null) throw new errors.NullOrEmptyArgumentError("queueName");
@@ -25,10 +25,12 @@ export class QueueReader extends events.EventEmitter implements interfaces.IQueu
     if (sqs == null) throw new errors.NullOrEmptyArgumentError("sqs");
     if (batchSize == null) batchSize = 10;
     if (batchSize <= 0) throw new errors.InvalidArgumentError("batchSize must be a positive number");
+    if (attributeNames == null) attributeNames = ['All'];
 
     this.sqs = sqs;
     this.queueName = queueName;
     this.batchSize = batchSize;
+    this.attributeNames = attributeNames;
     this.init = false;
   }
 
@@ -99,7 +101,7 @@ export class QueueReader extends events.EventEmitter implements interfaces.IQueu
     var params = {
       MaxNumberOfMessages: me.batchSize,
       QueueUrl: me.queueName,
-      AttributeNames: me.AttributeNames
+      AttributeNames: me.attributeNames
     };
 
     //ensure we aren't holding any outstanding delete requests

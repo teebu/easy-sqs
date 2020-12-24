@@ -24,8 +24,8 @@ export class Queue implements interfaces.IQueue {
   //  return new md.MessageDeleter(this.sqs, this.queueName, batchSize, null);
   //}
 
-  public createQueueReader(batchSize?: number): interfaces.IQueueReader {
-    return new reader.QueueReader(this.sqs, this.queueName, batchSize);
+  public createQueueReader(batchSize?: number, attributeNames?: string[]): interfaces.IQueueReader {
+    return new reader.QueueReader(this.sqs, this.queueName, batchSize, attributeNames);
   }
 
   public createMessageStream(highWaterMark?: number, batchSize?: number): interfaces.IMessageStream {

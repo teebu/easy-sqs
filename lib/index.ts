@@ -43,7 +43,7 @@ export interface ISqsClient {
   getQueueSync(queueUrl: string): interfaces.IQueue;
   getQueue(queueUrl: string, callback: (err: Error, queue: interfaces.IQueue) => void);
   createQueue(queueName: string, options: ICreateQueueOptions, callback: (err: Error, queue: interfaces.IQueue) => void);
-  createQueueReader(queueUrl: string, batchSize?: number): interfaces.IQueueReader;
+  createQueueReader(queueUrl: string, batchSize?: number, attributeNames?: string[]): interfaces.IQueueReader;
 }
 
 export interface ICreateQueueOptions {
@@ -152,10 +152,10 @@ export class SqsClient implements ISqsClient {
   }
 
 
-  public createQueueReader(queueUrl: string, batchSize?: number): interfaces.IQueueReader {
+  public createQueueReader(queueUrl: string, batchSize?: number, attributeNames?: string[]): interfaces.IQueueReader {
 
     var queue = this.getQueueSync(queueUrl);
-    return queue.createQueueReader(batchSize);
+    return queue.createQueueReader(batchSize, attributeNames);
 
   }
 
